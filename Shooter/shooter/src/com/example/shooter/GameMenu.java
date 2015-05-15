@@ -38,12 +38,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class GameMenu extends Activity
-implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-View.OnClickListener, RealTimeMessageReceivedListener,
-RoomStatusUpdateListener, RoomUpdateListener, OnInvitationReceivedListener,
-		OnItemSelectedListener, OnItemClickListener,
-		OnRotationFinishedListener, OnCenterClickListener {
+public class GameMenu extends Activity implements OnItemSelectedListener,
+		OnItemClickListener, OnRotationFinishedListener, OnCenterClickListener {
 	SharedPreferences pref;
 	SharedPreferences.Editor editor;
 	int bestscore = 0;
@@ -54,22 +50,7 @@ RoomStatusUpdateListener, RoomUpdateListener, OnInvitationReceivedListener,
 	CircleLayout circleMenu;
 	ArrayList<String> data = new ArrayList<String>();
 	Fetch_DB fdb;
-	public static GoogleApiClient client;
-	// Request code used to invoke sign in user interactions.
-	  private static final int RC_SIGN_IN = 9001;
 
-	  // Client used to interact with Google APIs.
-	  private GoogleApiClient mGoogleApiClient;
-
-	  // Are we currently resolving a connection failure?
-	  private boolean mResolvingConnectionFailure = false;
-
-	  // Has the user clicked the sign-in button?
-	  private boolean mSignInClicked = false;
-
-	  // Set to true to automatically start the sign in flow when the Activity starts.
-	  // Set to false to require the user to click the button in order to sign in.
-	  private boolean mAutoStartSignInFlow = true;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -77,15 +58,7 @@ RoomStatusUpdateListener, RoomUpdateListener, OnInvitationReceivedListener,
 		initPreference();
 		fetchDb();
 		initViews();
-		
-		mGoogleApiClient = new GoogleApiClient.Builder(this)
-        .addConnectionCallbacks(this)
-        .addOnConnectionFailedListener(this)
-        .addApi(Games.API).addScope(Games.SCOPE_GAMES)
-        .build();
-		
-		 mSignInClicked = true;
-         mGoogleApiClient.connect();
+
 	}
 
 	private void fetchDb() {
@@ -163,14 +136,7 @@ RoomStatusUpdateListener, RoomUpdateListener, OnInvitationReceivedListener,
 			circleMenu
 					.rotateViewToCenter((CircleImageView) findViewById(R.id.score));
 			break;
-		case RC_SIGN_IN:
-           
-            mSignInClicked = false;
-            mResolvingConnectionFailure = false;
-            if (resultCode == RESULT_OK) {
-              mGoogleApiClient.connect();
-            } 
-            break;
+		
 		}
 		super.onActivityResult(requestCode, resultCode, dat);
 
@@ -244,11 +210,7 @@ RoomStatusUpdateListener, RoomUpdateListener, OnInvitationReceivedListener,
 	}
 
 	private void medals() {
-		if (mGoogleApiClient.isConnected()) {
-			startActivityForResult(
-					Games.Achievements.getAchievementsIntent(mGoogleApiClient), 1);
-		}
-
+		
 	}
 
 	private void play() {
@@ -296,147 +258,4 @@ RoomStatusUpdateListener, RoomUpdateListener, OnInvitationReceivedListener,
 	}
 
 	
-@Override
-public void onBackPressed() {
-	client.disconnect();
-	super.onBackPressed();
-}
-
-@Override
-public void onInvitationReceived(Invitation arg0) {
-	// TODO Auto-generated method stub
-	
-}
-
-@Override
-public void onInvitationRemoved(String arg0) {
-	// TODO Auto-generated method stub
-	
-}
-
-@Override
-public void onJoinedRoom(int arg0, Room arg1) {
-	// TODO Auto-generated method stub
-	
-}
-
-@Override
-public void onLeftRoom(int arg0, String arg1) {
-	// TODO Auto-generated method stub
-	
-}
-
-@Override
-public void onRoomConnected(int arg0, Room arg1) {
-	// TODO Auto-generated method stub
-	
-}
-
-@Override
-public void onRoomCreated(int arg0, Room arg1) {
-	// TODO Auto-generated method stub
-	
-}
-
-@Override
-public void onConnectedToRoom(Room arg0) {
-	// TODO Auto-generated method stub
-	
-}
-
-@Override
-public void onDisconnectedFromRoom(Room arg0) {
-	// TODO Auto-generated method stub
-	
-}
-
-@Override
-public void onP2PConnected(String arg0) {
-	// TODO Auto-generated method stub
-	
-}
-
-@Override
-public void onP2PDisconnected(String arg0) {
-	// TODO Auto-generated method stub
-	
-}
-
-@Override
-public void onPeerDeclined(Room arg0, List<String> arg1) {
-	// TODO Auto-generated method stub
-	
-}
-
-@Override
-public void onPeerInvitedToRoom(Room arg0, List<String> arg1) {
-	// TODO Auto-generated method stub
-	
-}
-
-@Override
-public void onPeerJoined(Room arg0, List<String> arg1) {
-	// TODO Auto-generated method stub
-	
-}
-
-@Override
-public void onPeerLeft(Room arg0, List<String> arg1) {
-	// TODO Auto-generated method stub
-	
-}
-
-@Override
-public void onPeersConnected(Room arg0, List<String> arg1) {
-	// TODO Auto-generated method stub
-	
-}
-
-@Override
-public void onPeersDisconnected(Room arg0, List<String> arg1) {
-	// TODO Auto-generated method stub
-	
-}
-
-@Override
-public void onRoomAutoMatching(Room arg0) {
-	// TODO Auto-generated method stub
-	
-}
-
-@Override
-public void onRoomConnecting(Room arg0) {
-	// TODO Auto-generated method stub
-	
-}
-
-@Override
-public void onRealTimeMessageReceived(RealTimeMessage arg0) {
-	// TODO Auto-generated method stub
-	
-}
-
-@Override
-public void onClick(View v) {
-	// TODO Auto-generated method stub
-	
-}
-
-@Override
-public void onConnectionFailed(ConnectionResult arg0) {
-	// TODO Auto-generated method stub
-	
-}
-
-@Override
-public void onConnected(Bundle arg0) {
-	// TODO Auto-generated method stub
-	
-}
-
-@Override
-public void onConnectionSuspended(int arg0) {
-	// TODO Auto-generated method stub
-	
-}
 }
