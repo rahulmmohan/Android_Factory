@@ -24,7 +24,7 @@ public class MainActivity extends Activity {
 				// TODO Auto-generated method stub
 				AlertDialog.Builder ab=new AlertDialog.Builder(MainActivity.this);
 				ab.setTitle("Alert Dialog");
-				ab.setMessage("Are you fine" +
+				ab.setMessage("Are you finegh" +
 						"?");
 				ab.setPositiveButton("Ok", null);
 			
