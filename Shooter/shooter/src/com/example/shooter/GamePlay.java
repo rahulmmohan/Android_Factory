@@ -652,21 +652,17 @@ public class GamePlay extends Activity implements OnClickListener {
 
 	private void showAchievement(int chall2) {
 		challegecompleted=true;
-		if (GameMenu.client.isConnected()) {
-			
-			Games.Achievements.unlock(GameMenu.client, options[chall-1]);
-		}
+	
 	}
 
 	private void load() {
 		imageOriginal = getBitmapFromAsset("re" + r + ".png");
 		r++;
 		dialer.setImageBitmap(imageOriginal);
-		
 		dialer.startAnimation(load_bulets);
-
 	}
 
+	
 	private void reload() {
 
 		if (bullets == 0 && !firewithoutbullets && threadstarted) {
