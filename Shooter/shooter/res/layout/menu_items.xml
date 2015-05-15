@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:circle="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+  
+    android:layout_height="match_parent" >
+
+    <com.szugyi.circlemenu.view.CircleImageView
+        android:id="@+id/play"
+        circle:name="Play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/play" />
+
+    <com.szugyi.circlemenu.view.CircleImageView
+        android:id="@+id/score"
+        circle:name="Score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/score" />
+
+    <com.szugyi.circlemenu.view.CircleImageView
+        android:id="@+id/achie"
+        circle:name="Medals"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ach" />
+
+    <com.szugyi.circlemenu.view.CircleImageView
+        android:id="@+id/about"
+        circle:name="&lt; / &gt;"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/about" />
+
+    <com.szugyi.circlemenu.view.CircleImageView
+        android:id="@+id/vib"
+        circle:name="Viration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/vib" />
+
+    <com.szugyi.circlemenu.view.CircleImageView
+        android:id="@+id/sound"
+        circle:name="Sound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/sound" />
+
+</merge>

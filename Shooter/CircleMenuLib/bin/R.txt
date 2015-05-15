@@ -1,0 +1,16 @@
+int attr circleBackground 0x7f010000
+int attr firstChildPosition 0x7f010001
+int attr isRotating 0x7f010002
+int attr name 0x7f010004
+int attr speed 0x7f010003
+int id East 0x7f020000
+int id North 0x7f020001
+int id South 0x7f020002
+int id West 0x7f020003
+int[] styleable CircleImageView { 0x7f010004 }
+int styleable CircleImageView_name 0
+int[] styleable CircleLayout { 0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003 }
+int styleable CircleLayout_circleBackground 0
+int styleable CircleLayout_firstChildPosition 1
+int styleable CircleLayout_isRotating 2
+int styleable CircleLayout_speed 3

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">shooter</string>
+    <string name="hello_world">Hello world!</string>
+<string-array name="ids">
+        <item>CgkIurXBub8CEAIQAA</item>
+        <item>CgkIurXBub8CEAIQAQ</item>
+        <item>CgkIurXBub8CEAIQAw</item>
+        <item>CgkIurXBub8CEAIQBA</item>
+        <item>CgkIurXBub8CEAIQBQ</item>
+        <item>CgkIurXBub8CEAIQBg</item>
+        <item>CgkIurXBub8CEAIQBw</item>
+        <item>CgkIurXBub8CEAIQCA</item>
+        <item>CgkIurXBub8CEAIQCQ</item>
+        <item>CgkIurXBub8CEAIQCg</item>
+        <item>CgkIurXBub8CEAIQCw</item>
+        <item>CgkIurXBub8CEAIQDA</item>
+        <item>CgkIurXBub8CEAIQDQ</item>
+        <item>CgkIurXBub8CEAIQDg</item>
+        <item>CgkIurXBub8CEAIQDw</item>
+        <item>CgkIurXBub8CEAIQEA</item>
+        <item>CgkIurXBub8CEAIQEQ</item>
+        <item>CgkIurXBub8CEAIQEg</item>
+        <item>CgkIurXBub8CEAIQEw</item>
+        <item>CgkIurXBub8CEAIQFA</item>
+        <item>CgkIurXBub8CEAIQFQ</item>
+        <item>CgkIurXBub8CEAIQFg</item>
+    </string-array>
+</resources>
