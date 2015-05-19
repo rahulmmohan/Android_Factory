@@ -35,7 +35,8 @@
         </activity>
         <activity android:name="com.example.shooter.GamePlay" >
         </activity>
-        
+        <activity android:name="com.example.shooter.Achievements" >
+        </activity>
     </application>
 
 </manifest>

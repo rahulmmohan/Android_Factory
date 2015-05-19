@@ -33,29 +33,33 @@
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="34"
+            android:layout_marginBottom="20dp"
+            android:text="Play"
+            
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="#fff"
-            android:layout_marginBottom="20dp"
-            
             android:textSize="40sp" />
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="34"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:text="Bullets doesn&apos;t grown trees"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="#fff"
-            android:textSize="30sp" />
+            android:textSize="27sp" />
 
         <TextView
             android:id="@+id/textView4"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="1234"
+            android:gravity="center"
+            android:lines="3"
+            android:text="Fire continuously 10 rounds without reduce multiplier."
             android:textColor="#fff"
-            android:textSize="20sp" />
+            android:textSize="17sp" />
     </LinearLayout>
 
 </RelativeLayout>

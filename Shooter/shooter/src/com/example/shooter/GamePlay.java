@@ -2,13 +2,14 @@ package com.example.shooter;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
@@ -67,7 +68,8 @@ public class GamePlay extends Activity implements OnClickListener {
 	boolean threadstarted = false;
 	Handler mHandler = new Handler();
 	Runnable mUpdateResults1;
-	Runnable killMe, showNonEnemy, hideNonEnemy, clear, close;
+	Runnable killMe, showNonEnemy, hideNonEnemy, clear, close, unlock_achieve1,
+			unlock_achieve2;
 	int bullets = 0;
 	RelativeLayout reload;
 	LinearLayout canvas;
@@ -75,22 +77,25 @@ public class GamePlay extends Activity implements OnClickListener {
 	Vibrator v;
 	Thread thread;
 	boolean gameover = false;
+	boolean getkilled = false;
 	int enemies = 0, maxenemies = 6;
 	int nonenemies = 0, maxnonenemies = 1;
 	int progress = 0;
 	String colors[] = { "#D50505", "#EA15BA", "#8315EA", "#2E15EA", "#15ABEA",
 			"#15EADD", "#15EA88", "#15EA33", "#83EA15", "#E7EA15", "#EA8815",
 			"#EA3315" };
-	Animation anim,rotation,load_bulets;
+	Animation anim, rotation, load_bulets;
 	int higscore = 0;
 	int chall = 0;
 	int poopkill = 0;
 	int bulletwaste = 0;
 	int reloadcount1 = 0, reloadcount2 = 0;
 	Bitmap imageOriginal;
-	ImageView dialer,no_bullets;
+	ImageView dialer, no_bullets;
 	int r = 1;
-	boolean challegecompleted=false;
+	boolean challegecompleted = false;
+	Fetch_DB fdb;
+	ArrayList<String> data = new ArrayList<String>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +109,7 @@ public class GamePlay extends Activity implements OnClickListener {
 		initImageViews();
 		initViews();
 		initRunnables();
+		fdb = new Fetch_DB(getApplicationContext());
 		v = (Vibrator) getSystemService(getApplicationContext().VIBRATOR_SERVICE);
 		anim = AnimationUtils.loadAnimation(this, R.anim.holder_bottom);
 		reload.startAnimation(anim);
@@ -250,7 +256,9 @@ public class GamePlay extends Activity implements OnClickListener {
 				anim = AnimationUtils.loadAnimation(getApplicationContext(),
 						R.anim.holder_bottom_back);
 				reload.startAnimation(anim);
-				challenge(chall);
+				if (!challegecompleted) {
+					challenge();
+				}
 				for (int i = 0; i < 4; i++) {
 					for (int j = 0; j < 4; j++) {
 						a[i][j] = 0;
@@ -300,6 +308,7 @@ public class GamePlay extends Activity implements OnClickListener {
 				}, 3000);
 				v.vibrate(1500);
 				gameover = true;
+				getkilled = true;
 				for (int i = 0; i < 4; i++) {
 					for (int j = 0; j < 4; j++) {
 						t[i][j].cancel();
@@ -336,7 +345,9 @@ public class GamePlay extends Activity implements OnClickListener {
 			@Override
 			public void onClick(View v) {
 				reload();
-				challenge(chall);
+				if (!challegecompleted) {
+					challenge();
+				}
 			}
 		});
 		reload.setOnTouchListener(new OnTouchListener() {
@@ -359,7 +370,9 @@ public class GamePlay extends Activity implements OnClickListener {
 					if (initialX != finalX || initialY != finalY) {
 						reload();
 					}
-					challenge(chall);
+					if (!challegecompleted) {
+						challenge();
+					}
 					break;
 				}
 				return true;
@@ -493,7 +506,9 @@ public class GamePlay extends Activity implements OnClickListener {
 				multTextView.startAnimation(anim);
 
 			}
-			challenge(chall);
+			if (!challegecompleted) {
+				challenge();
+			}
 		} else {
 
 			mul = 1;
@@ -503,7 +518,6 @@ public class GamePlay extends Activity implements OnClickListener {
 			no_bullets.setVisibility(View.VISIBLE);
 			no_bullets.startAnimation(anim);
 			dialer.startAnimation(load_bulets);
-			
 
 		}
 	}
@@ -513,7 +527,9 @@ public class GamePlay extends Activity implements OnClickListener {
 		gameover = true;
 		anim = AnimationUtils.loadAnimation(this, R.anim.holder_bottom_back);
 		reload.startAnimation(anim);
-		challenge(chall);
+		if (!challegecompleted) {
+			challenge();
+		}
 		anim.setAnimationListener(new AnimationListener() {
 			@Override
 			public void onAnimationEnd(Animation arg0) {
@@ -542,107 +558,109 @@ public class GamePlay extends Activity implements OnClickListener {
 
 	}
 
-	private void challenge(int id) {
-		switch (id) {
+	private void challenge() {
+		switch (chall) {
 		case 1:
-			showAchievement(chall);
+			showAchievement();
 			break;
 
 		case 2:
 			if (score >= 32) {
-				showAchievement(chall);
+				showAchievement();
 			}
 			break;
 		case 3:
 			if (poopkill == 1) {
-				showAchievement(chall);
+				showAchievement();
 			}
 			break;
 		case 4:
-			if (score == 0) {
-				showAchievement(chall);
+			if (score == 0 && getkilled) {
+				showAchievement();
 			}
 			break;
 		case 5:
 			if (score >= 64) {
-				showAchievement(chall);
+				showAchievement();
 			}
 			break;
 		case 6:
 			if (reloadcount2 >= 5) {
-				showAchievement(chall);
+				showAchievement();
 			}
 			break;
 		case 7:
 			if (poopkill == 5) {
-				showAchievement(chall);
+				showAchievement();
 			}
 			break;
 		case 8:
-			showAchievement(chall);
+			if (!getkilled) {
+				showAchievement();
+			}
 			break;
 		case 9:
 			if (score >= 128) {
-				showAchievement(chall);
+				showAchievement();
 			}
 			break;
 		case 10:
 			if (reloadcount1 >= 10) {
-				showAchievement(chall);
+				showAchievement();
 			}
 			break;
 		case 11:
 			if (score >= 256) {
-				showAchievement(chall);
+				showAchievement();
 			}
 			break;
 
 		case 12:
 			if (poopkill == 10) {
-				showAchievement(chall);
+				showAchievement();
 			}
 			break;
 		case 13:
 			if (score <= -100) {
-				showAchievement(chall);
+				showAchievement();
 			}
 			break;
 		case 14:
 			if ((higscore - score) < 5) {
-				showAchievement(chall);
+				showAchievement();
 			}
 			break;
 		case 15:
 			if (bulletwaste >= 60) {
-				showAchievement(chall);
+				showAchievement();
 			}
 			break;
 
 		case 16:
 			if (bullets == 0) {
-				showAchievement(chall);
+				showAchievement();
 			}
 			break;
 		case 17:
 			if (score >= 512) {
-				showAchievement(chall);
+				showAchievement();
 			}
 			break;
 
 		case 18:
 			if (poopkill == 25) {
-				showAchievement(chall);
+				showAchievement();
 			}
 			break;
 
 		case 19:
 			if (bulletwaste >= 100) {
-				showAchievement(chall);
+				showAchievement();
 			}
 			break;
 		case 20:
 			if (score >= 1024) {
-				showAchievement(chall);
+				showAchievement();
 			}
 			break;
 
@@ -650,9 +668,57 @@ public class GamePlay extends Activity implements OnClickListener {
 
 	}
 
-	private void showAchievement(int chall2) {
-		challegecompleted=true;
-	
+	private void showAchievement() {
+		unlock_achieve1 = new Runnable() {
+			public void run() {
+				challegecompleted = true;
+				data = fdb.get_row_by_id("" + chall);
+				LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				View layout = inflater.inflate(R.layout.achieve_toast,
+						(ViewGroup) findViewById(R.id.item));
+				Toast toast = new Toast(getApplicationContext());
+				toast.setGravity(Gravity.TOP, 0, 0);
+				toast.setDuration(Toast.LENGTH_SHORT);
+				toast.setView(layout);
+				toast.show();
+
+			}
+		};
+		unlock_achieve2 = new Runnable() {
+			public void run() {
+				challegecompleted = true;
+				data = fdb.get_row_by_id("" + chall);
+				LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				View layout = inflater.inflate(R.layout.one_item_toast,
+						(ViewGroup) findViewById(R.id.item));
+
+				TextView title = (TextView) layout.findViewById(R.id.title);
+				TextView desc = (TextView) layout.findViewById(R.id.desc);
+				title.setText(data.get(1));
+				desc.setText(data.get(2));
+				Toast toast = new Toast(getApplicationContext());
+				toast.setGravity(Gravity.TOP, 0, 0);
+				toast.setDuration(Toast.LENGTH_LONG);
+				toast.setView(layout);
+				toast.show();
+			}
+		};
+		Thread unlock = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				if (!challegecompleted) {
+					mHandler.post(unlock_achieve1);
+					try {
+						Thread.currentThread().sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					mHandler.post(unlock_achieve2);
+				}
+			}
+		});
+		unlock.start();
 	}
 
 	private void load() {
@@ -662,7 +728,6 @@ public class GamePlay extends Activity implements OnClickListener {
 		dialer.startAnimation(load_bulets);
 	}
 
-	
 	private void reload() {
 
 		if (bullets == 0 && !firewithoutbullets && threadstarted) {
@@ -683,7 +748,7 @@ public class GamePlay extends Activity implements OnClickListener {
 		imageOriginal = getBitmapFromAsset("re0.png");
 
 		dialer.setImageBitmap(imageOriginal);
-	
+
 		dialer.startAnimation(rotation);
 		new Thread(new Runnable() {
 			@Override
@@ -717,5 +782,4 @@ public class GamePlay extends Activity implements OnClickListener {
 		return bitmap;
 	}
 
-	
 }

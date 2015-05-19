@@ -14,6 +14,10 @@ public class Fetch_DB extends SQLiteOpenHelper {
 	private static final String DB_NAME = "game.db";
 	private static final int SCHEMA_VERSION = 1;// data base
 	ArrayList<String> data=new ArrayList<String>();
+	ArrayList<ArrayList> achieve=new ArrayList<ArrayList>();
+	ArrayList<String> title=new ArrayList<String>();
+	ArrayList<String> desc=new ArrayList<String>();
+	ArrayList<String> finish=new ArrayList<String>();
 	public Fetch_DB(Context context) {
 		super(context, DB_NAME, null, SCHEMA_VERSION);
 		}
@@ -56,7 +60,31 @@ public class Fetch_DB extends SQLiteOpenHelper {
 		}
 		return data;
 	}
+	public ArrayList<String> get_row_by_id(String id) {
 
+
+		Cursor cursor;
+
+		try {
+			cursor = getReadableDatabase().rawQuery("SELECT * FROM `achievements` WHERE id='"+id+"'", null);
+			cursor.moveToFirst();
+			if (!cursor.isAfterLast())
+			{
+				do {
+					data.add(cursor.getString(0));
+					data.add(cursor.getString(1));
+					data.add(cursor.getString(2));
+					data.add(cursor.getString(3));
+					
+				} while (cursor.moveToNext());
+			}
+			cursor.close();
+			
+		} catch (SQLException e){
+			Log.e("Sbi_po_DB:get_single_row()", e.toString());
+		}
+		return data;
+	}
 	// ********************** GET SINGLE ROW ********************** //
 	public void set_row(String id) {
 
@@ -71,6 +99,33 @@ public class Fetch_DB extends SQLiteOpenHelper {
 			Log.e("Sbi_po_DB:get_single_row()", e.toString());
 		}
 	}
-	
+	public ArrayList<ArrayList> get_achievements() {
+
+
+		Cursor cursor;
+
+		try {
+			cursor = getReadableDatabase().rawQuery("SELECT * FROM `achievements` order by id asc", null);
+			cursor.moveToFirst();
+			if (!cursor.isAfterLast())
+			{
+				do {
+					title.add(cursor.getString(1));
+					desc.add(cursor.getString(2));
+					finish.add(cursor.getString(4));
+					
+					
+				} while (cursor.moveToNext());
+			}
+			cursor.close();
+			achieve.add(title);
+			achieve.add(desc);
+			achieve.add(finish);
+			
+		} catch (SQLException e){
+			Log.e("Sbi_po_DB:get_single_row()", e.toString());
+		}
+		return achieve;
+	}
 	
 }
