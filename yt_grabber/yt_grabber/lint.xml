@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="NewApi">
+        <ignore path="src/com/example/billprint/MainActivity.java" />
+        <ignore path="src/info/androidhive/listviewfeed/MainActivity.java" />
+    </issue>
+</lint>

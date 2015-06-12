@@ -15,8 +15,10 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.szugyi.circlemenu.view.CircleImageView;
 import com.szugyi.circlemenu.view.CircleLayout;
@@ -49,6 +51,28 @@ public class GameMenu extends Activity implements OnItemSelectedListener,
 		fetchDb();
 		initViews();
 
+		initVib(circleMenu.getChildAt(4));
+		initMusic(circleMenu.getChildAt(5));
+	}
+
+	private void initMusic(View childAt) {
+		ImageView im = (ImageView) childAt;
+		if (pref.getBoolean("music", false)) {
+			im.setImageResource(R.drawable.sound);
+		} else {
+			im.setImageResource(R.drawable.no_sound);
+		}
+
+	}
+
+	private void initVib(View childAt) {
+		ImageView im = (ImageView) childAt;
+
+		if (pref.getBoolean("vib", false)) {
+			im.setImageResource(R.drawable.vib);
+		} else {
+			im.setImageResource(R.drawable.no_vib);
+		}
 	}
 
 	private void fetchDb() {
@@ -107,11 +131,12 @@ public class GameMenu extends Activity implements OnItemSelectedListener,
 	protected void onActivityResult(int requestCode, int resultCode, Intent dat) {
 		switch (requestCode) {
 		case 100:
-			 animation = AnimationUtils.loadAnimation(this,
-					R.anim.from_inner);
+			animation = AnimationUtils.loadAnimation(this, R.anim.from_inner);
 			circleMenu.startAnimation(animation);
 			currentscore = dat.getIntExtra("score", 0);
+			int kill = dat.getIntExtra("kill", 0);
 
+			fdb.set_row(kill, currentscore);
 			if (dat.getBooleanExtra("result", false)) {
 
 				fdb.set_row(data.get(0));
@@ -204,43 +229,50 @@ public class GameMenu extends Activity implements OnItemSelectedListener,
 		case R.id.about:
 			break;
 		case R.id.vib:
-			setVib();
+
+			setVib(view);
 			break;
 		case R.id.sound:
-			setMusic();
+			setMusic(view);
 			break;
 
 		}
 
 	}
 
-
-	private void setMusic() {
+	private void setMusic(View view) {
+		ImageView im = (ImageView) view;
 		if (pref.getBoolean("music", false)) {
 			editor.putBoolean("music", false);
 			editor.commit();
 			editor = pref.edit();
 			bestscoreTextView.setText("Music is disabled");
+			im.setImageResource(R.drawable.no_sound);
 		} else {
 			editor.putBoolean("music", true);
 			editor.commit();
 			editor = pref.edit();
 			bestscoreTextView.setText("Music is enabled");
+			im.setImageResource(R.drawable.sound);
 		}
 
 	}
 
-	private void setVib() {
+	private void setVib(View view) {
+		ImageView im = (ImageView) view;
+
 		if (pref.getBoolean("vib", false)) {
 			editor.putBoolean("vib", false);
 			editor.commit();
 			editor = pref.edit();
 			bestscoreTextView.setText("Vibaration is disabled");
+			im.setImageResource(R.drawable.no_vib);
 		} else {
 			editor.putBoolean("vib", true);
 			editor.commit();
 			editor = pref.edit();
 			bestscoreTextView.setText("Vibaration is enabled");
+			im.setImageResource(R.drawable.vib);
 		}
 
 	}
@@ -251,8 +283,7 @@ public class GameMenu extends Activity implements OnItemSelectedListener,
 	}
 
 	private void play() {
-		 animation = AnimationUtils.loadAnimation(this,
-				R.anim.to_inner);
+		animation = AnimationUtils.loadAnimation(this, R.anim.to_inner);
 		circleMenu.startAnimation(animation);
 
 		animation.setAnimationListener(new AnimationListener() {
@@ -262,6 +293,8 @@ public class GameMenu extends Activity implements OnItemSelectedListener,
 				i.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 				i.putExtra("bestscore", bestscore);
 				i.putExtra("challenge", Integer.parseInt(data.get(0)));
+				i.putExtra("vib", pref.getBoolean("vib", true));
+				i.putExtra("music", pref.getBoolean("music", true));
 				startActivityForResult(i, 100);
 			}
 
@@ -299,35 +332,36 @@ public class GameMenu extends Activity implements OnItemSelectedListener,
 		switch (v.getId()) {
 
 		case R.id.textView1:
-			
-			onItemClick(((CircleImageView)circleMenu.getSelectedItem()), ((CircleImageView)circleMenu.getSelectedItem()).getName());
+
+			onItemClick(((CircleImageView) circleMenu.getSelectedItem()),
+					((CircleImageView) circleMenu.getSelectedItem()).getName());
 			break;
 		}
 	}
-@Override
-public void onBackPressed() {
-	animation = AnimationUtils.loadAnimation(this,
-			R.anim.to_inner);
-	circleMenu.startAnimation(animation);
 
-	animation.setAnimationListener(new AnimationListener() {
-		@Override
-		public void onAnimationEnd(Animation arg0) {
-			finish();
-		}
+	@Override
+	public void onBackPressed() {
+		animation = AnimationUtils.loadAnimation(this, R.anim.to_inner);
+		circleMenu.startAnimation(animation);
 
-		@Override
-		public void onAnimationStart(Animation animation) {
-			// TODO Auto-generated method stub
+		animation.setAnimationListener(new AnimationListener() {
+			@Override
+			public void onAnimationEnd(Animation arg0) {
+				finish();
+			}
 
-		}
+			@Override
+			public void onAnimationStart(Animation animation) {
+				// TODO Auto-generated method stub
 
-		@Override
-		public void onAnimationRepeat(Animation animation) {
-			// TODO Auto-generated method stub
+			}
 
-		}
-	});
-	super.onBackPressed();
-}
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+		super.onBackPressed();
+	}
 }

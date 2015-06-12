@@ -17,6 +17,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -61,7 +62,7 @@ public class GamePlay extends Activity implements OnClickListener {
 	LinearLayout p[][] = new LinearLayout[4][4];
 	ProgressBar pr;
 	TextView scoretTextView, multTextView, highscoreTextView;
-	int score = 0, mul = 1;
+	int score = 0, kill = 0, mul = 1;
 	float initialX, initialY, finalX, finalY;
 	String hint = "";
 	boolean firewithoutbullets = false;
@@ -96,6 +97,8 @@ public class GamePlay extends Activity implements OnClickListener {
 	boolean challegecompleted = false;
 	Fetch_DB fdb;
 	ArrayList<String> data = new ArrayList<String>();
+	boolean vib, music;
+	MediaPlayer fire_sound, reload_sound, music_sound;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -103,12 +106,16 @@ public class GamePlay extends Activity implements OnClickListener {
 		setContentView(R.layout.activity_main);
 		higscore = getIntent().getIntExtra("bestscore", 0);
 		chall = getIntent().getIntExtra("challenge", 0);
+		vib = getIntent().getBooleanExtra("vib", true);
+		music = getIntent().getBooleanExtra("music", true);
+
 		options = getResources().getStringArray(R.array.ids);
 		initArray();
 		initGif();
 		initImageViews();
 		initViews();
 		initRunnables();
+		initSounds();
 		fdb = new Fetch_DB(getApplicationContext());
 		v = (Vibrator) getSystemService(getApplicationContext().VIBRATOR_SERVICE);
 		anim = AnimationUtils.loadAnimation(this, R.anim.holder_bottom);
@@ -118,6 +125,11 @@ public class GamePlay extends Activity implements OnClickListener {
 		anim = AnimationUtils.loadAnimation(this, R.anim.custom_anim);
 		rotation = AnimationUtils.loadAnimation(this, R.anim.reload);
 		load_bulets = AnimationUtils.loadAnimation(this, R.anim.rotate);
+	}
+
+	private void initSounds() {
+		fire_sound = MediaPlayer.create(this, R.raw.fire);
+		fire_sound.setLooping(false);
 	}
 
 	private void initGif() {
@@ -252,6 +264,7 @@ public class GamePlay extends Activity implements OnClickListener {
 		};
 		close = new Runnable() {
 			public void run() {
+
 				gameover = true;
 				anim = AnimationUtils.loadAnimation(getApplicationContext(),
 						R.anim.holder_bottom_back);
@@ -270,6 +283,7 @@ public class GamePlay extends Activity implements OnClickListener {
 					public void onAnimationEnd(Animation arg0) {
 						Intent returnIntent = new Intent();
 						returnIntent.putExtra("score", score);
+						returnIntent.putExtra("kill", kill);
 						returnIntent.putExtra("result", challegecompleted);
 						setResult(100, returnIntent);
 						finish();
@@ -306,7 +320,7 @@ public class GamePlay extends Activity implements OnClickListener {
 						mHandler.post(close);
 					}
 				}, 3000);
-				v.vibrate(1500);
+				vibrate(1500);
 				gameover = true;
 				getkilled = true;
 				for (int i = 0; i < 4; i++) {
@@ -344,6 +358,7 @@ public class GamePlay extends Activity implements OnClickListener {
 
 			@Override
 			public void onClick(View v) {
+				vibrate(500);
 				reload();
 				if (!challegecompleted) {
 					challenge();
@@ -365,6 +380,7 @@ public class GamePlay extends Activity implements OnClickListener {
 				case MotionEvent.ACTION_MOVE:
 					break;
 				case MotionEvent.ACTION_UP:
+					vibrate(500);
 					float finalX = event.getX();
 					float finalY = event.getY();
 					if (initialX != finalX || initialY != finalY) {
@@ -449,7 +465,8 @@ public class GamePlay extends Activity implements OnClickListener {
 		if (bullets > 0) {
 
 			load();
-			this.v.vibrate(50);
+			vibrate(50);
+			sound(0);
 			bullets--;
 			bulletwaste++;
 			pr.setProgress(bullets);
@@ -465,6 +482,7 @@ public class GamePlay extends Activity implements OnClickListener {
 			int val = a[bi][bj];
 			if (val == 1 || val == -1) {
 				if (val == 1) {
+					kill++;
 					score += mul;
 					scoretTextView.setText(score + "");
 				} else {
@@ -522,6 +540,23 @@ public class GamePlay extends Activity implements OnClickListener {
 		}
 	}
 
+	private void sound(int k) {
+		if (music) {
+			switch (k) {
+			case 0:
+				fire_sound.start();
+				break;
+			}
+		}
+
+	}
+
+	private void vibrate(int k) {
+		if (vib) {
+			this.v.vibrate(k);
+		}
+	}
+
 	@Override
 	public void onBackPressed() {
 		gameover = true;
@@ -535,6 +570,7 @@ public class GamePlay extends Activity implements OnClickListener {
 			public void onAnimationEnd(Animation arg0) {
 				Intent returnIntent = new Intent();
 				returnIntent.putExtra("score", score);
+				returnIntent.putExtra("kill", kill);
 				returnIntent.putExtra("result", challegecompleted);
 				setResult(100, returnIntent);
 				finish();

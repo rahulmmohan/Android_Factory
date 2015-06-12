@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:hmkcode="http://schemas.android.com/apk/res-auto" >
+
+    <item
+        android:id="@+id/My_Friends"
+        
+        android:orderInCategory="100"
+        android:title="Video"
+        hmkcode:showAsAction="always"/>
+    <item
+        android:id="@+id/Friend_Requests"
+        
+        android:orderInCategory="100"
+        android:title="Audio"
+        hmkcode:showAsAction="always"/>
+
+       
+
+</menu>

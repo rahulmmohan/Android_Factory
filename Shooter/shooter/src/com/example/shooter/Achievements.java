@@ -20,7 +20,7 @@ public class Achievements extends Activity{
 		initViews();
 		db=new Fetch_DB(getApplicationContext());
 		achieve=db.get_achievements();
-		MyCustom_ListAdapter mc=new MyCustom_ListAdapter(getApplicationContext(), achieve.get(0), achieve.get(1),achieve.get(2));
+		MyCustom_ListAdapter mc=new MyCustom_ListAdapter(getApplicationContext(), achieve.get(0), achieve.get(1),achieve.get(2),achieve.get(3));
 		list.setAdapter(mc);
 	}
 	private void initViews() {

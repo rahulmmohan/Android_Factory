@@ -15,6 +15,7 @@ public class Fetch_DB extends SQLiteOpenHelper {
 	private static final int SCHEMA_VERSION = 1;// data base
 	ArrayList<String> data=new ArrayList<String>();
 	ArrayList<ArrayList> achieve=new ArrayList<ArrayList>();
+	ArrayList<String> id=new ArrayList<String>();
 	ArrayList<String> title=new ArrayList<String>();
 	ArrayList<String> desc=new ArrayList<String>();
 	ArrayList<String> finish=new ArrayList<String>();
@@ -99,6 +100,21 @@ public class Fetch_DB extends SQLiteOpenHelper {
 			Log.e("Sbi_po_DB:get_single_row()", e.toString());
 		}
 	}
+	public void set_row(int kill,int score) {
+
+
+		Cursor cursor;
+
+		try {
+			cursor = getReadableDatabase().rawQuery("UPDATE achievements SET finish=finish+"+kill+" WHERE id='21'", null);
+			cursor.moveToFirst();
+			cursor = getReadableDatabase().rawQuery("UPDATE achievements SET finish=finish+"+score+" WHERE id='22'", null);
+			cursor.moveToFirst();
+			cursor.close();
+		} catch (SQLException e){
+			Log.e("Sbi_po_DB:get_single_row()", e.toString());
+		}
+	}
 	public ArrayList<ArrayList> get_achievements() {
 
 
@@ -110,6 +126,7 @@ public class Fetch_DB extends SQLiteOpenHelper {
 			if (!cursor.isAfterLast())
 			{
 				do {
+					id.add(cursor.getString(0));
 					title.add(cursor.getString(1));
 					desc.add(cursor.getString(2));
 					finish.add(cursor.getString(4));
@@ -118,6 +135,7 @@ public class Fetch_DB extends SQLiteOpenHelper {
 				} while (cursor.moveToNext());
 			}
 			cursor.close();
+			achieve.add(id);
 			achieve.add(title);
 			achieve.add(desc);
 			achieve.add(finish);
